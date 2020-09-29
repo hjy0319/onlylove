@@ -1,0 +1,24 @@
+server:
+  port: 8081
+  ssl:
+    key-store: 4528102_www.5qel4c.cn.pfx
+    key-store-password: tHkx3I5j
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://123.57.59.221:3306/onlylove?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: root
+    password: a2335156
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    auto-mapping-behavior: full
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+
+logging:
+  level:
+    root: info
+

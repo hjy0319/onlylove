@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hujy.onlylove.mapper.UserMapper">
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user
+        (
+        nick_name,
+        province,
+        city,
+        avatar_url
+        )
+        VALUES
+        (
+        #{user.nickName},
+        #{user.province},
+        #{user.city},
+        #{user.avatarUrl}
+        )
+
+    </insert>
+
+    <select id="getId" resultType="java.lang.Integer">
+        SELECT
+        id
+        FROM user
+        WHERE
+        nick_name = #{nickName}
+        AND is_del = 0
+        LIMIT 1
+    </select>
+
+    <select id="getAll" resultType="com.hujy.onlylove.entity.User">
+        SELECT
+        *
+        FROM user u
+        WHERE u.is_del = 0
+        AND EXISTS (SELECT 1 FROM wallet w WHERE u.id = w.user_code AND w.is_del = 0)
+    </select>
+
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hujy.onlylove.mapper.BillMapper">
+
+    <insert id="batchInsert">
+        INSERT INTO bill
+        (
+        user_code,
+        year_week,
+        bill_type,
+        money
+        )
+        VALUES
+        <foreach collection="bills" item="item" index="index" separator=",">
+            (
+            #{item.userCode},
+            #{item.yearWeek},
+            #{item.billType},
+            #{item.money}
+            )
+        </foreach>
+    </insert>
+
+    <select id="getTotalIncome" resultType="com.hujy.onlylove.model.vo.TotalIncomeVO">
+        SELECT
+            (SELECT SUM(money)  FROM bill WHERE user_code = #{userCode} AND bill_type = 1 AND is_del = 0) totalIncome,
+            (SELECT SUM(money)  FROM bill WHERE user_code = #{userCode} AND bill_type = 2 AND is_del = 0) totalFine,
+            (SELECT SUM(money)  FROM bill WHERE user_code = #{userCode} AND bill_type = 3 AND is_del = 0) totalUsedMoney,
+            (SELECT money  FROM wallet WHERE user_code = #{userCode}) restMoney
+    </select>
+
+    <select id="billPaging" resultType="com.hujy.onlylove.entity.Bill">
+        SELECT
+        user_code,
+        year_week,
+        bill_type,
+        money,
+        create_time
+        FROM bill
+        WHERE user_code = #{param.userCode}
+        <if test="param.beginDate != null and param.endDate != null">
+            AND create_time BETWEEN #{param.beginDate} AND #{param.endDate}
+        </if>
+        AND is_del = 0
+        ORDER BY create_time DESC
+    </select>
+</mapper>

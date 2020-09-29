@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hujy.onlylove.mapper.RewardMapper">
+
+    <insert id="batchInsert">
+        INSERT INTO reward
+        (
+        year_week,
+        user_code,
+        reward_type,
+        money
+        )
+        VALUES
+        <foreach collection="rewards" item="item" index="index" separator=",">
+            (
+            #{item.yearWeek},
+            #{item.userCode},
+            #{item.rewardType},
+            #{item.money}
+            )
+        </foreach>
+    </insert>
+</mapper>
