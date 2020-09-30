@@ -31,7 +31,7 @@ public class ScheduleJobConfig {
     private UserMapper userMapper;
 
     @Scheduled(cron = "0 10 0 * * ?")
-    private void daySettlement() {
+    private void doDaySettlement() {
         List<User> users = userMapper.getAll();
         if (CollectionUtils.isEmpty(users)) {
             return;
@@ -44,7 +44,7 @@ public class ScheduleJobConfig {
     }
 
     @Scheduled(cron = "0 30 0 ? * MON")
-    private void weekSettlement() {
+    private void doWeekSettlement() {
         List<User> users = userMapper.getAll();
         if (CollectionUtils.isEmpty(users)) {
             return;
@@ -52,6 +52,28 @@ public class ScheduleJobConfig {
         for (User user : users) {
             taskService.weekSettlement(String.valueOf(user.getId()));
 
+        }
+    }
+
+    @Scheduled(cron = "0 0 10 * * ?")
+    private void doSendSignInRemindMail() {
+        List<User> users = userMapper.getAll();
+        if (CollectionUtils.isEmpty(users)) {
+            return;
+        }
+        for (User user : users) {
+            taskService.sendSignInRemindMail(user);
+        }
+    }
+
+    @Scheduled(cron = "0 0 22 * * ?")
+    private void doSendFineRemindMail() {
+        List<User> users = userMapper.getAll();
+        if (CollectionUtils.isEmpty(users)) {
+            return;
+        }
+        for (User user : users) {
+            taskService.sendFineRemindMail(user);
         }
     }
 }

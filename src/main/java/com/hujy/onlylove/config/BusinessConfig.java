@@ -35,6 +35,9 @@ public class BusinessConfig {
 
     public static final String TARGET_PROGRESS = "target:progress";
 
+    public static final String MAIL_TEMPLATE_SIGN_IN = "mail_template:sign_in";
+    public static final String MAIL_TEMPLATE_FINE = "mail_template:fine";
+
 
 
 

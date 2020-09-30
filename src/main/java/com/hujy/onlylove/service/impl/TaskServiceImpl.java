@@ -5,6 +5,7 @@ import com.hujy.onlylove.config.BusinessConfig;
 import com.hujy.onlylove.entity.Bill;
 import com.hujy.onlylove.entity.Reward;
 import com.hujy.onlylove.entity.Task;
+import com.hujy.onlylove.entity.User;
 import com.hujy.onlylove.enums.BillTypeEnum;
 import com.hujy.onlylove.enums.RewardTypeEnum;
 import com.hujy.onlylove.enums.TaskStatusEnum;
@@ -19,7 +20,9 @@ import com.hujy.onlylove.model.vo.WeekIncomeVO;
 import com.hujy.onlylove.service.TaskService;
 import com.hujy.onlylove.service.TransactionalService;
 import com.hujy.onlylove.util.KeyGenerator;
+import com.hujy.onlylove.util.MailUtils;
 import com.hujy.onlylove.util.MyDateUtils;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
@@ -489,6 +492,77 @@ public class TaskServiceImpl implements TaskService {
             bills.add(bill);
         }
         return bills;
+
+    }
+
+    @Override
+    public void sendSignInRemindMail(User user) {
+        if (StringUtils.isBlank(user.getMailAccount())) {
+            return;
+        }
+
+        String taskDate = MyDateUtils.dateToDateStr(new Date(), MyDateUtils.NORMAL_DATE_FORMAT);
+        Task taskDetail = taskMapper.getByTaskDateAndUserCode(taskDate, user.getId().toString());
+
+        if (taskDetail != null) {
+            return;
+        }
+
+        String content = businessConfig.get(BusinessConfig.MAIL_TEMPLATE_SIGN_IN);
+        content = content.replace("{0}", user.getNickName());
+
+        System.out.println(content);
+        try {
+            MailUtils.sendMail(user.getMailAccount(), content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void sendFineRemindMail(User user) {
+        if (StringUtils.isBlank(user.getMailAccount())) {
+            return;
+        }
+
+        String taskDate = MyDateUtils.dateToDateStr(new Date(), MyDateUtils.NORMAL_DATE_FORMAT);
+        Task taskDetail = taskMapper.getByTaskDateAndUserCode(taskDate, user.getId().toString());
+
+        if (taskDetail == null) {
+            return;
+        }
+
+        Integer dietMealFlag = taskDetail.getDietMealFlag();
+        Integer sportsFlag = taskDetail.getSportsFlag();
+        int weekDayNo = MyDateUtils.getWeekDayNum(MyDateUtils.dateStrToDate(taskDate, MyDateUtils.NORMAL_DATE_FORMAT));
+        boolean isDietMealDay = checkIsFixedDay(weekDayNo, BusinessConfig.FIXED_DAY_DIET_MEAL);
+        boolean isSportsDay = checkIsFixedDay(weekDayNo, BusinessConfig.FIXED_DAY_SPORTS);
+
+        boolean dietMealFine = dietMealFlag == 0 && isDietMealDay;
+        boolean sportsFine = sportsFlag == 0 && isSportsDay;
+
+        if (!dietMealFine && !sportsFine) {
+            return;
+        }
+
+        String subContent = "";
+        if (dietMealFine) {
+            subContent += "【代餐】";
+        }
+
+        if (sportsFine) {
+            subContent += "【运动】";
+        }
+        String content = businessConfig.get(BusinessConfig.MAIL_TEMPLATE_FINE);
+
+        content = content.replace("{0}", user.getNickName()).replace("{1}", subContent);
+
+        try {
+            MailUtils.sendMail(user.getMailAccount(), content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

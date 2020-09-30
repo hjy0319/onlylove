@@ -2,6 +2,7 @@ package com.hujy.onlylove.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hujy.onlylove.entity.Task;
+import com.hujy.onlylove.entity.User;
 import com.hujy.onlylove.model.param.TaskPagingParam;
 import com.hujy.onlylove.model.param.TaskSaveParam;
 import com.hujy.onlylove.model.vo.WeekIncomeVO;
@@ -35,4 +36,8 @@ public interface TaskService {
     void daySettlement(String userCode);
 
     void weekSettlement(String userCode);
+
+    void sendSignInRemindMail(User user);
+
+    void sendFineRemindMail(User user);
 }

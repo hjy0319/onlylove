@@ -13,4 +13,5 @@ public interface UserService {
     void save(User user);
 
     Integer getId(String nickName);
+
 }
