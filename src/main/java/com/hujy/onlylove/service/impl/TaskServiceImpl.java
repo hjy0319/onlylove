@@ -22,7 +22,6 @@ import com.hujy.onlylove.service.TransactionalService;
 import com.hujy.onlylove.util.KeyGenerator;
 import com.hujy.onlylove.util.MailUtils;
 import com.hujy.onlylove.util.MyDateUtils;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
@@ -508,12 +507,13 @@ public class TaskServiceImpl implements TaskService {
             return;
         }
 
+        String title = businessConfig.get(BusinessConfig.MAIL_TITLE);
         String content = businessConfig.get(BusinessConfig.MAIL_TEMPLATE_SIGN_IN);
         content = content.replace("{0}", user.getNickName());
 
         System.out.println(content);
         try {
-            MailUtils.sendMail(user.getMailAccount(), content);
+            MailUtils.sendMail(user.getMailAccount(), title, content);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -554,12 +554,13 @@ public class TaskServiceImpl implements TaskService {
         if (sportsFine) {
             subContent += "【运动】";
         }
+        String title = businessConfig.get(BusinessConfig.MAIL_TITLE);
         String content = businessConfig.get(BusinessConfig.MAIL_TEMPLATE_FINE);
 
         content = content.replace("{0}", user.getNickName()).replace("{1}", subContent);
 
         try {
-            MailUtils.sendMail(user.getMailAccount(), content);
+            MailUtils.sendMail(user.getMailAccount(), title, content);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -37,6 +37,7 @@ public class BusinessConfig {
 
     public static final String MAIL_TEMPLATE_SIGN_IN = "mail_template:sign_in";
     public static final String MAIL_TEMPLATE_FINE = "mail_template:fine";
+    public static final String MAIL_TITLE = "mail_title";
 
 
 

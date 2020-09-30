@@ -25,16 +25,7 @@ public class MailUtils {
     // 网易126邮箱的 SMTP 服务器地址为: smtp.126.com
     private static final String EMAIL_SMTP_HOST = "smtp.163.com";
 
-    private static final String TITLE = "OnlyLove减肥任务提醒";
-
-    // 收件人邮箱（替换为自己知道的有效邮箱）
-    public static String receiveMailAccount = "282677690@qq.com";
-
-    public static void main(String[] args) throws Exception {
-
-    }
-
-    public static void sendMail(String receiveMailAccount, String content) throws Exception {
+    public static void sendMail(String receiveMailAccount, String title, String content) throws Exception {
         // 1. 创建参数配置, 用于连接邮件服务器的参数配置
         Properties props = new Properties();                    // 参数配置
         props.setProperty("mail.transport.protocol", "smtp");   // 使用的协议（JavaMail规范要求）
@@ -61,7 +52,7 @@ public class MailUtils {
         session.setDebug(true);
 
         // 3. 创建一封邮件
-        MimeMessage message = createMimeMessage(session, SEND_MAIL_ACCOUNT, receiveMailAccount, TITLE, content);
+        MimeMessage message = createMimeMessage(session, receiveMailAccount, title, content);
 
         // 4. 根据 Session 获取邮件传输对象
         Transport transport = session.getTransport();
@@ -93,20 +84,19 @@ public class MailUtils {
      * 创建一封只包含文本的简单邮件
      *
      * @param session     和服务器交互的会话
-     * @param sendMail    发件人邮箱
      * @param receiveMailAccount 收件人邮箱
      * @return
      * @throws Exception
      */
-    public static MimeMessage createMimeMessage(Session session, String sendMail, String receiveMailAccount, String title, String content) throws Exception {
+    private static MimeMessage createMimeMessage(Session session, String receiveMailAccount, String title, String content) throws Exception {
         // 1. 创建一封邮件
         MimeMessage message = new MimeMessage(session);
 
         // 2. From: 发件人
-        message.setFrom(new InternetAddress(sendMail, "Only Love", "UTF-8"));
+        message.setFrom(new InternetAddress(SEND_MAIL_ACCOUNT, "Only Love", "UTF-8"));
 
         // 3. To: 收件人（可以增加多个收件人、抄送、密送）
-        message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(receiveMailAccount, "XX用户", "UTF-8"));
+        message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(receiveMailAccount, "UTF-8"));
 
         // 4. Subject: 邮件主题
         message.setSubject(title, "UTF-8");
