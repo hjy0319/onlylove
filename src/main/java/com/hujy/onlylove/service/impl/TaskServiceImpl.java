@@ -258,9 +258,12 @@ public class TaskServiceImpl implements TaskService {
 
         Date date = StringUtils.isBlank(taskDate) ? new Date() : MyDateUtils.dateStrToDate(taskDate, MyDateUtils.NORMAL_DATE_FORMAT);
         String currentWeek = MyDateUtils.getYearWeek(date);
-        String lastWeek = MyDateUtils.getYearWeek(MyDateUtils.getPastDate(date, 7));
+        Date pastDate = MyDateUtils.getPastDate(date, 7);
+        String lastWeek = MyDateUtils.getYearWeek(pastDate);
 
         StatisticsVO vo = new StatisticsVO();
+        vo.setCurrentWeekDateRange(getWeekDateRange(date));
+        vo.setLastWeekDateRange(getWeekDateRange(pastDate));
         vo.setCategories(getCategories(date));
         List<Task> currentWeekTask = taskMapper.getWeekTasks(userCode, currentWeek);
         List<Task> lastWeekTask = taskMapper.getWeekTasks(userCode, lastWeek);
@@ -280,6 +283,15 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
+    private static String getWeekDateRange(Date date) {
+        int weekDayNum = MyDateUtils.getWeekDayNum(date);
+        weekDayNum = weekDayNum == 0 ? 7 : weekDayNum;
+
+        String beginDate = MyDateUtils.dateToDateStr(MyDateUtils.getPastDate(date, weekDayNum - 1), "M.d");
+        String endDate = MyDateUtils.dateToDateStr(MyDateUtils.getPastDate(date, weekDayNum - 7), "M.d");
+
+        return beginDate + " ~ " + endDate;
+    }
 
     private static List<String> getCategories(Date date) {
 
@@ -291,8 +303,7 @@ public class TaskServiceImpl implements TaskService {
 
             Date pastDate = MyDateUtils.getPastDate(date, weekDayNum - i);
             String dateStr = MyDateUtils.dateToDateStr(pastDate, "d");
-            System.out.println(dateStr + WeekDayEnum.lookup.get(i));
-            categories.add(dateStr + WeekDayEnum.lookup.get(i));
+            categories.add(WeekDayEnum.lookup.get(i) + "(" + dateStr + ")");
 
         }
         return categories;

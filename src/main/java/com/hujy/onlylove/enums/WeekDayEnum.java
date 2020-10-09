@@ -18,19 +18,19 @@ import java.util.Map;
 @AllArgsConstructor
 public enum WeekDayEnum {
 
-    MON(1, "(一)"),
+    MON(1, "一"),
 
-    TUES(2, "(二)"),
+    TUES(2, "二"),
 
-    WED(3, "(三)"),
+    WED(3, "三"),
 
-    THUR(4, "(四)"),
+    THUR(4, "四"),
 
-    FRI(5, "(五)"),
+    FRI(5, "五"),
 
-    SAT(6, "(六)"),
+    SAT(6, "六"),
 
-    SUN(7, "(日)");
+    SUN(7, "日");
 
     private Integer code;
 

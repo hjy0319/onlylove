@@ -18,6 +18,10 @@ public class StatisticsVO implements Serializable {
 
     private List<String> categories;
 
+    private String currentWeekDateRange;
+
+    private String lastWeekDateRange;
+
     private List<Task> currentWeekTask;
 
     private List<Task> lastWeekTask;
