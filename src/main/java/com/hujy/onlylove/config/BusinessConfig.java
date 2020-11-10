@@ -39,6 +39,8 @@ public class BusinessConfig {
     public static final String MAIL_TEMPLATE_FINE = "mail_template:fine";
     public static final String MAIL_TITLE = "mail_title";
 
+    public static final String DAY_NUM_TREND = "day_num:trend";
+
 
 
 

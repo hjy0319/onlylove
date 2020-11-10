@@ -49,6 +49,14 @@ public class MyDateUtils {
         return dateTimeFormatter.format(localDateTime);
     }
 
+    public static String dateToDateStr(Date date) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(NORMAL_DATE_FORMAT);
+        Instant instant = date.toInstant();
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zoneId);
+        return dateTimeFormatter.format(localDateTime);
+    }
+
     public static Date dateStrToDate(String dateStr, String format) {
         DateTimeFormatter dateDtf = DateTimeFormatter.ofPattern(format);
         LocalDate localDate = LocalDate.parse(dateStr, dateDtf);
@@ -57,12 +65,19 @@ public class MyDateUtils {
         return Date.from(instant);
     }
 
-    public static Date dateTimeStrToDate(String dateStr, String format) {
-        DateTimeFormatter dateDtf = DateTimeFormatter.ofPattern(format);
-        LocalDateTime localDateTime = LocalDateTime.parse(dateStr, dateDtf);
+    public static Date dateStrToDate(String dateStr) {
+        DateTimeFormatter dateDtf = DateTimeFormatter.ofPattern(NORMAL_DATE_FORMAT);
+        LocalDate localDate = LocalDate.parse(dateStr, dateDtf);
         ZoneId zone = ZoneId.systemDefault();
-        Instant instant = localDateTime.atZone(zone).toInstant();
+        Instant instant = localDate.atStartOfDay(zone).toInstant();
         return Date.from(instant);
+    }
+
+    public static String dateStrFormat(String dateStr, String formatTo) {
+        DateTimeFormatter dateDtf1 = DateTimeFormatter.ofPattern(NORMAL_DATE_FORMAT);
+        LocalDate localDate = LocalDate.parse(dateStr, dateDtf1);
+        DateTimeFormatter dateDtf2 = DateTimeFormatter.ofPattern(formatTo);
+        return dateDtf2.format(localDate);
     }
 
     public static Date getPastDate(Date date, int past) {
@@ -70,6 +85,14 @@ public class MyDateUtils {
         calendar.setTime(date);
         calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) - past);
         return calendar.getTime();
+    }
+
+    public static String getPastDate(String dateStr, int past) {
+        Date date = dateStrToDate(dateStr);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) - past);
+        return dateToDateStr(calendar.getTime());
     }
     /**
      * 当前年周数:yyyy-w
@@ -114,12 +137,9 @@ public class MyDateUtils {
     }
 
     public static void main(String[] args) {
-        Date date = dateStrToDate("2020-12-20", NORMAL_DATE_FORMAT);
 
-        int weekDayNo = getWeekDayNum(date);
-        System.out.println(weekDayNo);
 
-        String dateStr = dateToDateStr(date, "yyyy-M-d");
-        System.out.println(dateStr);
+        String s = dateStrFormat("2020-12-20","M.d");
+        System.out.println(s);
     }
 }

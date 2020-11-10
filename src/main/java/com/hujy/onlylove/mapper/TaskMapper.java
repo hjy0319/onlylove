@@ -31,4 +31,9 @@ public interface TaskMapper extends BaseMapper<Task> {
     WeekIncomeVO getWeekIncome(@Param("userCode") String userCode, @Param("yearWeek") String yearWeek);
 
     String getWeekFinalWeight(@Param("userCode") String userCode, @Param("yearWeek") String yearWeek);
+
+    List<Task> getRangeTasks(@Param("userCode") String userCode,
+                             @Param("startDate") String startDate,
+                             @Param("endDate") String endDate);
+
 }
