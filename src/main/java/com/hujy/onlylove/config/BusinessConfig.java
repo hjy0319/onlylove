@@ -19,9 +19,9 @@ public class BusinessConfig {
     public static final String DAY_REWARD_DIET_MEAL = "day_reward:diet_meal";
     public static final String DAY_REWARD_SPORTS = "day_reward:sports";
 
-    public static final String DAY_FINE_SIGN_IN = "day_reward:sign_in";
-    public static final String DAY_FINE_DIET_MEAL = "day_reward:diet_meal";
-    public static final String DAY_FINE_SPORTS = "day_reward:sports";
+    public static final String DAY_FINE_SIGN_IN = "day_fine:sign_in";
+    public static final String DAY_FINE_DIET_MEAL = "day_fine:diet_meal";
+    public static final String DAY_FINE_SPORTS = "day_fine:sports";
 
     public static final String DAY_GRADE_SIGN_IN = "day_grade:sign_in";
     public static final String DAY_GRADE_DIET_MEAL = "day_grade:diet_meal";
